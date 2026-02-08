@@ -168,7 +168,7 @@
       crossorigin="anonymous"
     />
 
-    <h1>Before Secret Wars vs. After...<br>did you make it?</h1>
+    <h1>Secret Wars is upon us<br>did you make it?</h1>
 
     <button id="revealBtn">Reveal Your Fate 💀</button>
     <button id="shareBtn">Share your fate</button>
