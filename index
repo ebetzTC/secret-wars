@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Secret Wars Fate</title>
+  <!-- html2canvas for PNG share -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #000000;
+      color: #e0e0e0;
+      font-family: 'Arial Black', 'Impact', sans-serif;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .container {
+      max-width: 90%;
+      padding: 40px 20px;
+      position: relative;
+      z-index: 2;
+      background: rgba(10, 10, 10, 0.7);
+      border-radius: 25px;
+      border: 1px solid #333;
+      box-shadow: 0 0 60px rgba(255, 50, 50, 0.15);
+    }
+
+    .logo {
+      max-width: 700px;
+      width: 100%;
+      height: auto;
+      margin-bottom: 40px;
+      filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.7)) brightness(1.2);
+    }
+
+    h1 {
+      font-size: 3.6rem;
+      margin: 0 0 30px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #ff4d4d, #ffd700, #ff4d4d);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px rgba(255, 77, 77, 0.7);
+    }
+
+    button {
+      padding: 18px 50px;
+      font-size: 1.6rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #000;
+      background: linear-gradient(135deg, #ffd700, #ff8c00, #ffd700);
+      border: 3px solid #ffd700;
+      border-radius: 60px;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5);
+      transition: all 0.4s ease;
+      margin: 20px 15px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+
+    button:hover::before {
+      opacity: 1;
+    }
+
+    button:hover {
+      transform: translateY(-5px) scale(1.08);
+      box-shadow: 0 15px 40px rgba(255, 215, 0, 0.8);
+      border-color: #ffea80;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    #revealBtn {
+      background: linear-gradient(135deg, #ff4d4d, #ff1744, #ff4d4d);
+      border-color: #ff1744;
+    }
+
+    #shareBtn {
+      background: linear-gradient(135deg, #00bfff, #1e90ff, #00bfff);
+      border-color: #00bfff;
+      color: #000;
+      display: none;
+    }
+
+    #shareBtn:hover, #revealBtn:hover {
+      box-shadow: 0 15px 40px rgba(255, 215, 0, 0.8);
+    }
+
+    #result {
+      font-size: 3.2rem;
+      font-weight: bold;
+      margin-top: 50px;
+      opacity: 0;
+      transition: opacity 1.2s ease, transform 1s ease;
+      text-shadow: 0 0 25px rgba(255, 0, 0, 0.8);
+      min-height: 200px;
+      line-height: 1.4;
+      transform: translateY(20px);
+    }
+
+    #result.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .survived {
+      color: #00ff9d;
+      text-shadow: 0 0 40px #00ff9d;
+    }
+
+    .passed {
+      color: #ff2a6d;
+      text-shadow: 0 0 40px #ff2a6d;
+    }
+
+    .age {
+      font-size: 2.4rem;
+      margin-top: 20px;
+      opacity: 0.9;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 25px;
+      font-size: 1rem;
+      opacity: 0.6;
+      z-index: 2;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="capture-area">
+    <img 
+      id="secretWarsLogo"
+      src="https://static.wikia.nocookie.net/marvelcinematicuniverse/images/0/0a/AvengersSecretWarsLogo.jpg/revision/latest?cb=20240728041942" 
+      alt="Avengers: Secret Wars Logo (White/Silver)" 
+      class="logo"
+      crossorigin="anonymous"
+    />
+
+    <h1>Before Secret Wars vs. After...<br>did you make it?</h1>
+
+    <button id="revealBtn">Reveal Your Fate 💀</button>
+    <button id="shareBtn">Share your fate</button>
+
+    <div id="result"></div>
+  </div>
+
+  <footer>Avengers: Secret Wars copyright Marvel. I'm not Marvel.</footer>
+
+  <script>
+    const revealBtn = document.getElementById('revealBtn');
+    const shareBtn = document.getElementById('shareBtn');
+    const result = document.getElementById('result');
+    const captureArea = document.getElementById('capture-area');
+
+    revealBtn.addEventListener('click', () => {
+      const survived = Math.random() < 0.5;
+      result.classList.remove('survived', 'passed');
+      result.innerHTML = '';
+
+      if (survived) {
+        result.textContent = "YOU SURVIVED SECRET WARS 🔥";
+        result.classList.add('survived');
+      } else {
+        const age = Math.floor(Math.random() * 111) + 10;
+        result.innerHTML = `
+          YOU DIDN'T SURVIVE SECRET WARS 💀
+          <div class="age">Passed away at ${age} years old</div>
+        `;
+        result.classList.add('passed');
+      }
+
+      result.classList.add('show');
+      shareBtn.style.display = 'inline-block';
+
+      revealBtn.disabled = true;
+      revealBtn.style.opacity = '0.5';
+      revealBtn.textContent = 'Fate Revealed';
+    });
+
+    shareBtn.addEventListener('click', () => {
+      html2canvas(captureArea, {
+        scale: 3,                // Higher res for sharper PNG
+        useCORS: true,           // Attempt to load cross-origin images
+        backgroundColor: null,
+        logging: true            // For debug in console if needed
+      }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'Before-After-Secret-Wars-Fate.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      }).catch(err => {
+        console.error('Capture error:', err);
+        alert('PNG capture failed – try refreshing or check console for details.');
+      });
+    });
+  </script>
+
+</body>
+</html>
+
